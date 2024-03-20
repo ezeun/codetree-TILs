@@ -159,7 +159,7 @@ int main() {
         //4. 몬스터 시체 소멸
         for(int i=1; i<=4; i++){
             for(int j=1; j<=4; j++){
-                while(turn-2 >= dead[i][j].front()) { // ==라고 해도 됨
+                while((!dead[i][j].empty()) && (turn-2 >= dead[i][j].front())) { // ==라고 해도 됨
                     dead[i][j].pop();
                 }
             }
