@@ -7,7 +7,7 @@ typedef pair<int, int> pii;
 
 int N, M, P, C, D;
 int Rr, Rc;
-int santa_matrix[51][51]; //1~P 산타 번호 저장
+int santa_matrix[52][52]; //1~P 산타 번호 저장
 pair<pii, pii> santa_status[31]; //{{0:생존/1:기절/2:탈락, 점수}, {r,c}}
 int turn;
 int santa_faint[31]; //산타가 기절한 turn을 저장
