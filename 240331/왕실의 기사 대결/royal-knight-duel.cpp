@@ -25,6 +25,7 @@ int tmp_mat2[41][41];
 Knight tmp_knight[31];
 
 vector<int> pushed_knight;
+int meet_wall=0;
 /////////////////////////////////////////////
 
 void init(){
@@ -58,7 +59,7 @@ int calc_trap(int r, int c, int h, int w){
     // 좌상단 r,c
     // 우하단 r+h-1, c+w-1
     int rx = r+h-1, ry = c+w-1;
-    return trap[rx][ry] - trap[rx-1][ry] - trap[r][c-1] + trap[r-1][c-1];
+    return trap[rx][ry] - trap[rx-h][ry] - trap[rx][ry-w] + trap[r-1][c-1];
 }
 
 void copy(){
@@ -82,8 +83,15 @@ void restore(){
     }
 }
 
-bool move(int i, int d){
-
+void print(){
+    for(int i=1; i<=L; i++){
+        for(int j=1; j<=L; j++){
+            cout<<mat2[i][j];
+        }
+        cout<<'\n';
+    }
+}
+void move(int i, int d){
     // i번 기사를 d방향으로 밀기
     for(int x=knight[i].r; x<knight[i].r+knight[i].h; x++){
         for(int y=knight[i].c; y<knight[i].c+knight[i].w; y++){
@@ -95,7 +103,8 @@ bool move(int i, int d){
     for(int x=knight[i].r; x<knight[i].r+knight[i].h; x++){
         for(int y=knight[i].c; y<knight[i].c+knight[i].w; y++){
             if(mat1[x][y]==2 || x<1 || x>L || y<1 || y>L){
-                return false; //끝에 벽이 있으면 모든 기사는 이동할 수 없음
+                meet_wall=1;
+                return; //끝에 벽이 있으면 모든 기사는 이동할 수 없음
             }
             if(mat2[x][y]){
                 pushed_knight.push_back(mat2[x][y]);
@@ -104,7 +113,6 @@ bool move(int i, int d){
             mat2[x][y]=i;
         }
     }
-    return true;
 }
 
 int calc_damage(){
@@ -126,12 +134,14 @@ int main() {
 
         copy();
         pushed_knight.clear();
-        if(move(i, d)==false){ //벽을 만나면 mat2, knight 원상복구
+        meet_wall=0;
+        move(i, d);
+        if(meet_wall){ //벽을 만나면 mat2, knight 원상복구
             restore();
         }
         else{ //밀린 기사들 체력 깎기
             for(auto &kn : pushed_knight){
-                knight[kn].k = calc_trap(knight[kn].r,knight[kn].c,knight[kn].h,knight[kn].w);
+                knight[kn].k -= calc_trap(knight[kn].r,knight[kn].c,knight[kn].h,knight[kn].w);
                 if(knight[kn].k<=0) {
                     knight[kn].alive=false;
                     for(int x=knight[kn].r; x<knight[kn].r+knight[kn].h; x++){
@@ -143,7 +153,6 @@ int main() {
             }
         }
     }
-
     cout<< calc_damage();
     return 0;
 }
