@@ -121,7 +121,7 @@ void rotate() {
 					while (c < 1) c++;
 				}
 			}
-			else if(exitR - pR > 0){ 
+			else if(exitR - pR > 0){
 				if (exitC - pC > 0) { // 사람이 출구 왼쪽 아래
 					len = max(pR - exitR, exitC - pC) + 1;
 					r = pR - len + 1;
@@ -143,9 +143,9 @@ void rotate() {
 	}
 
 	//pq.top에 있는 정사각형을 시계방향 90도 회전시키기
-	int len = pq.top.first;
-	int r = pq.top.second.first;
-	int c = pq.top.second.second;
+	int len = pq.top().first;
+	int r = pq.top().second.first;
+	int c = pq.top().second.second;
 
 	int tmp[11][11];
 	for (int i = 1; i <= N; i++) {
@@ -154,27 +154,28 @@ void rotate() {
 		}
 	}
 
-	// (i, j) -> (j, N-i+1) 이렇게 바뀜
+	// (i, j) -> (r+(j-c), c + (r+len-1-i)) 이렇게 바뀜
 
 	//출구 회전
 	int tmpR = exitR;
-	exitR = exitC;
-	exitC = c+len-1-(tmpR-r);
+    int tmpC = exitC;
+	exitR = r + (tmpC-c);
+	exitC = c + (r+len-1-tmpR);
 
 	//사람 회전
 	for (int p = 0; p < player.size(); p++) {
 		if (player[p].first>=r&& player[p].first<r+len&& player[p].second>=c&& player[p].second<c+len) {
 			int pr = player[p].first;
-			player[p].first = player[p].second;
-			player[p].second = c + len - 1 - (pr - r);
+			player[p].first = r + (player[p].second-c);
+			player[p].second = c + (r+len-1-pr);
 		}
 	}
 
 	//벽 회전 및 내구도 감소
 	for (int i = r; i <r+len; i++) {
 		for (int j = c; j <c+len; j++) {
-			tmp[j][c+len-1-(i-r)] = mat[i][j]-1;
-		}
+            tmp[r+(j-c)][c + (r+len-1-i)] = max(0, mat[i][j]-1);
+        }
 	}
 
 	for (int i = 1; i <= N; i++) {
@@ -184,16 +185,34 @@ void rotate() {
 	}
 }
 
+void print(){
+    cout<<"출구 "<<exitR<<" "<<exitC<<'\n';
+    for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+            cout<<mat[i][j]<<" ";
+        } cout<<'\n';
+    }
+    for(auto &p : player){
+        cout<<p.first<<" "<<p.second<<'\n';
+    }
+    cout<<"\n";
+}
+
 int main() {
 
 	init();
 
 	for (int i = 0; i < K; i++) {
+
+
+
 		move();
+
 
 		if (player.empty()) break;
 
 		rotate();
+
 
 	}
 
