@@ -210,8 +210,6 @@ int main() {
 
 		rotate();
 
-		cout << i << '\n';
-		print();
 	}
 
 	cout << sum << '\n' << exitR << " " << exitC;
