@@ -240,7 +240,7 @@ int main() {
         }
     }
 
-    printMat();
+    // printMat();
 //    printTurrets();
     printStrongestTurret();
 
