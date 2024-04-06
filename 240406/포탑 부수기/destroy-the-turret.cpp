@@ -70,7 +70,7 @@ void selectTarget(){
     target = turret[turret.size()-1];
 }
 void printTurret(Turret t){
-    cout<<t.power<<" "<<t.recentAttack<<" "<<t.x<<" "<<t.y<<"\n";
+    cout<<"turret "<<t.x<<" "<<t.y<<" "<<t.power<<" "<<t.recentAttack<<" "<<"\n";
 }
 
 void copyMat(){
@@ -104,8 +104,8 @@ bool laserAttack(){
             int nx = cur.first.first+dx[d];
             int ny = cur.first.second+dy[d];
 
-            nx = (nx+4)%4;
-            ny = (ny+4)%4;
+            nx = (nx+N)%N; //N,M을 실수로 4라고 하드코딩했었음
+            ny = (ny+M)%M;
 
             if(vis[nx][ny]) continue;
             if(mat[nx][ny]<=0) continue;
@@ -148,8 +148,8 @@ void potanAttack(){
         int nx = target.x+dx8[d];
         int ny = target.y+dy8[d];
 
-        nx = (nx+4)%4;
-        ny = (ny+4)%4;
+        nx = (nx+N)%N; //N,M을 실수로 4라고 하드코딩했었음
+        ny = (ny+M)%M;
 
         if(nx==attacker.x && ny==attacker.y) continue;
         if(mat[nx][ny]<=0) continue;
@@ -207,6 +207,12 @@ void printStrongestTurret(){
     cout<<mxPower;
 }
 
+void printTurrets(){
+    for(Turret &tur : turret){
+        cout<<tur.x<<" "<<tur.y<<" "<<tur.power<<'\n';
+    }
+}
+
 int main() {
 
     init();
@@ -234,6 +240,8 @@ int main() {
         }
     }
 
+    printMat();
+//    printTurrets();
     printStrongestTurret();
 
     return 0;
