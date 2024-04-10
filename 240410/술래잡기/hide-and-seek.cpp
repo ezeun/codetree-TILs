@@ -143,9 +143,11 @@ void taggerMove() {
 	//끝점일 때 방향 틀기
 	if (tagger.x == 1 && tagger.y == 1) {
 		tagger.d = 2;
+		goLarger = false;
 	}	
 	if (tagger.x == (n / 2 + 1) && tagger.y == (n / 2 + 1)) {
 		tagger.d = 0;
+		goLarger = true;
 	}
 }
 
@@ -210,6 +212,7 @@ int main() {
 
 		catchRunner(turn);
 	}
+
 	cout << score;
 	return 0;
 }
