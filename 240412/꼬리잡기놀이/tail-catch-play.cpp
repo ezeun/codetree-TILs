@@ -79,20 +79,7 @@ void move() { //각 팀은 머리사람을 따라 한 칸 이동
 
 		//격자랑 team 둘다 갱신!!
 
-		//머리사람 이동
-		for (int d = 0; d < 4; d++) {
-			int nx = team[i].hx + dx[d];
-			int ny = team[i].hy + dy[d];
-
-			if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-			if (mat[nx][ny] == 4) {
-				mat[team[i].hx][team[i].hy] = 2;
-				mat[nx][ny] = 1;
-				team[i].hx = nx;
-				team[i].hy = ny;
-				break;
-			}
-		}
+		//꼬리먼저 이동하자.. 머리한테 먹히는 경우 제대로 동작안함
 
 		//꼬리사람 이동
 		for (int d = 0; d < 4; d++) {
@@ -105,6 +92,21 @@ void move() { //각 팀은 머리사람을 따라 한 칸 이동
 				mat[nx][ny] = 3;
 				team[i].tx = nx;
 				team[i].ty = ny;
+				break;
+			}
+		}
+
+		//머리사람 이동
+		for (int d = 0; d < 4; d++) {
+			int nx = team[i].hx + dx[d];
+			int ny = team[i].hy + dy[d];
+
+			if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
+			if (mat[nx][ny] == 4) {
+				mat[team[i].hx][team[i].hy] = 2;
+				mat[nx][ny] = 1;
+				team[i].hx = nx;
+				team[i].hy = ny;
 				break;
 			}
 		}
@@ -197,7 +199,7 @@ void getScore(pii personHitByBall) { //머리사람을 시작으로 k번째 사�
 
 			if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
 			if (vis[nx][ny]) continue;
-			if (mat[nx][ny] == 0 || mat[nx][ny] == 4) continue;
+			if (mat[nx][ny] == 0 || mat[nx][ny] == 3 || mat[nx][ny] == 4) continue;
 
 			q.push({ nx, ny });
 			vis[nx][ny] = vis[cur.first][cur.second]+1;
