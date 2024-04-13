@@ -36,21 +36,18 @@ void init() {
 }
 
 void interaction(int santaNum, int r, int c, int dr, int dc) {
-	//santaNum은 (r,c)로 가고싶은데 mat[r][c]에 다른 산타가 있으니, 그 산타를 dr,dc방향으로 밀고 santaNum을 mat[r][c]에 안착시키기
-	//mat[r][c]에 있는 산타를 dr,dc 방향으로 1칸 밀고, mat[r][c]에는 santaNum을 저장
+	//santaNum이 mat[r][c]에 있었는데 dr,dc 방향으로 밀자
+	santa[santaNum].r += dr;
+	santa[santaNum].c += dc;
 	if (r + dr<1 || r + dr>N || c + dc<1 || c + dc>N) { //게임판 밖으로 밀려나오게 된 산타는 게임 탈락
-		santa[mat[r][c]].alive = false;
-		mat[r][c] = santaNum;
+		santa[santaNum].alive = false;
 	}
 	else if (!mat[r + dr][c + dc]) { //밀려난 칸에 다른 산타가 없으면
-		santa[mat[r][c]].r += dr;
-		santa[mat[r][c]].c += dc;
-		mat[r + dr][c + dc] = mat[r][c];
-		mat[r][c] = santaNum;
+		mat[r + dr][c + dc] = santaNum;
 	}
 	else { //밀려난 곳에 또 산타가 있으면 연쇄적으로 1칸씩 밀려나기 반복
-		interaction(mat[r][c], r + dr, c + dc, dr, dc);
-		mat[r][c] = santaNum;
+		interaction(mat[r + dr][c + dc], r + dr, c + dc, dr, dc);
+		mat[r + dr][c + dc] = santaNum;
 	}
 }
 
@@ -64,7 +61,8 @@ void pushed(int santaNum, int dr, int dc, int q) { //santaNum번 산타가 {dr,d
 		santa[santaNum].alive = false;
 	}
 	else if (mat[santa[santaNum].r][santa[santaNum].c]) { //밀려난 칸에 다른 산타가 있으면 상호작용 발생
-		interaction(santaNum, santa[santaNum].r, santa[santaNum].c, dr, dc);
+		interaction(mat[santa[santaNum].r][santa[santaNum].c], santa[santaNum].r, santa[santaNum].c, dr, dc);
+		mat[santa[santaNum].r][santa[santaNum].c] = santaNum; 
 	}
 	else { //밀려난 칸에 다른 산타없으면
 		mat[santa[santaNum].r][santa[santaNum].c] = santaNum;
@@ -121,7 +119,7 @@ void Smove(int turn) {
 	for (int p = 1; p <= P; p++) { 
 		if (!santa[p].alive) continue; //탈락한 산타
 		if (santa[p].t!=0 && santa[p].t + 2 > turn) continue; //기절한 상태
-
+		//cout << "p " << p << "\n";
 		//루돌프에게 가장 가까워지는 방향으로 1칸 이동
 		int nearestDist = pow(Rr-santa[p].r,2)+pow(Rc-santa[p].c,2), nearestDir=-1;
 		for (int d = 0; d < 4; d++) {
@@ -195,6 +193,12 @@ void printScore() {
 
 void print() {
 	cout << Rr << " " << Rc << '\n';
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			cout << mat[i][j] << " ";
+		}
+		cout << '\n';
+	}
 	for (int p = 1; p <= P; p++) {
 		cout << p << "번 ";
 		cout << "(" << santa[p].r << ", " << santa[p].c << ") ";
@@ -208,7 +212,7 @@ int main() {
 	for (int turn = 1; turn <= M; turn++) {
 		//cout << "\nturn " << turn << '\n';
 
-		Rmove(turn); 
+		Rmove(turn); //print();
 		Smove(turn);
 		if (allDead()) break;
 		getScore();
