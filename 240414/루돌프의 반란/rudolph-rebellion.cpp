@@ -119,7 +119,7 @@ void Smove(int turn) {
 	for (int p = 1; p <= P; p++) { 
 		if (!santa[p].alive) continue; //탈락한 산타
 		if (santa[p].t!=0 && santa[p].t + 2 > turn) continue; //기절한 상태
-		//cout << "p " << p << "\n";
+		
 		//루돌프에게 가장 가까워지는 방향으로 1칸 이동
 		int nearestDist = pow(Rr-santa[p].r,2)+pow(Rc-santa[p].c,2), nearestDir=-1;
 		for (int d = 0; d < 4; d++) {
@@ -210,14 +210,12 @@ int main() {
 	init();
 
 	for (int turn = 1; turn <= M; turn++) {
-		//cout << "\nturn " << turn << '\n';
 
-		Rmove(turn); //print();
+		Rmove(turn); 
 		Smove(turn);
 		if (allDead()) break;
 		getScore();
 
-		//print();
 	}
 	//print();
 	printScore();
