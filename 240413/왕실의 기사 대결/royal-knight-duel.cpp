@@ -55,7 +55,7 @@ bool canMove(int i, int d) {
 				canGo = false;
 				break;
 			}
-			if (Kmat[r][c] && find(willMove.begin(), willMove.end(), Kmat[r][c])==willMove.end()) { //다른 기사를 만나면(중복체크)
+			if (Kmat[r][c]) { //다른 기사를 만나면
 				canGo &= canMove(Kmat[r][c], d);
 			}
 		}
@@ -67,7 +67,7 @@ bool canMove(int i, int d) {
 				canGo = false;
 				break;
 			}
-			if (Kmat[r][c] && find(willMove.begin(), willMove.end(), Kmat[r][c]) == willMove.end()) { //다른 기사를 만나면(중복체크)
+			if (Kmat[r][c]) { //다른 기사를 만나면
 				canGo &= canMove(Kmat[r][c], d);
 			}
 		}
@@ -79,7 +79,7 @@ bool canMove(int i, int d) {
 				canGo = false;
 				break;
 			}
-			if (Kmat[r][c] && find(willMove.begin(), willMove.end(), Kmat[r][c]) == willMove.end()) { //다른 기사를 만나면(중복체크)
+			if (Kmat[r][c]) { //다른 기사를 만나면
 				canGo &= canMove(Kmat[r][c], d);
 			}
 		}
@@ -91,7 +91,7 @@ bool canMove(int i, int d) {
 				canGo = false;
 				break;
 			}
-			if (Kmat[r][c] && find(willMove.begin(), willMove.end(), Kmat[r][c]) == willMove.end()) { //다른 기사를 만나면(중복체크)
+			if (Kmat[r][c]) { //다른 기사를 만나면
 				canGo &= canMove(Kmat[r][c], d);
 			}
 		}
@@ -99,6 +99,7 @@ bool canMove(int i, int d) {
 
 	if (canGo) {
 		willMove.push_back(i); 
+		willMove.erase(unique(willMove.begin(), willMove.end()), willMove.end());
 	}
 	return canGo;
 }
