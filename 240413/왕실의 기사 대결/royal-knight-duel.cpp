@@ -17,8 +17,8 @@ vector<Knight> knight(31);
 
 int initialK[31]; //초기 체력 저장
 
-int dx[4] = {-1,0,1,0}; //상우하좌
-int dy[4] = {0,1,0,-1};
+int dx[4] = { -1,0,1,0 }; //상우하좌
+int dy[4] = { 0,1,0,-1 };
 
 vector<int> willMove;
 
@@ -56,7 +56,7 @@ bool canMove(int i, int d) {
 				canGo = false;
 				break;
 			}
-			if (Kmat[r][c] && find(willMove.begin(), willMove.end(), Kmat[r][c])==willMove.end()) { //다른 기사를 만나면(중복체크)
+			if (Kmat[r][c] && find(willMove.begin(), willMove.end(), Kmat[r][c]) == willMove.end()) { //다른 기사를 만나면(중복체크)
 				canGo &= canMove(Kmat[r][c], d);
 			}
 		}
@@ -74,7 +74,7 @@ bool canMove(int i, int d) {
 		}
 	}
 	else if (d == 2) { //하
-		int r = knight[i].r + knight[i].h-1 + dx[2];
+		int r = knight[i].r + knight[i].h - 1 + dx[2];
 		for (int c = knight[i].c; c < knight[i].c + knight[i].w; c++) {
 			if (mat[r][c] == 2 || !(1 <= r && r <= L && 1 <= c && c <= L)) { //벽을 만나면
 				canGo = false;
@@ -99,7 +99,7 @@ bool canMove(int i, int d) {
 	}
 
 	if (canGo) {
-		willMove.push_back(i); 
+		willMove.push_back(i);
 	}
 	return canGo;
 }
@@ -127,7 +127,7 @@ void move(int d) {
 void demage() {
 	//willMove에 있는 기사들 중 마지막 기사를 제외하고 데미지 입힘
 	//체력0이하면 체스판에서 사라지고 alive=false로 세팅
-	for (int w = 0; w < willMove.size()-1; w++) {
+	for (int w = 0; w < willMove.size() - 1; w++) {
 		int i = willMove[w];
 		int sum = 0; //함정 개수
 		for (int x = knight[i].r; x < knight[i].r + knight[i].h; x++) {
@@ -174,13 +174,14 @@ int main() {
 		cin >> i >> d;
 
 		willMove.clear();
+		if(knight[i].alive==false) continue;
 		if (canMove(i, d)) {
-			move(d); 
+			move(d);
 			demage();
 		}
 		//printKmat();
 	}
-	//printKmat();
+	// printKmat();
 	cout << sumOfAliveDemage();
 
 	return 0;
