@@ -100,7 +100,6 @@ void move_player(int turn){
         if(noOwner.size() == 0){ //아무도 독점계약 하지 않은 칸이 없다면,
             if(myOwn != -1) moveTo = myOwn; //본인이 독점계약한 칸으로 이동
             else{ // 그것마저 없다면 이동할 수 없으므로 -1 출력
-                cout<< -1;
                 canNotMove = true;
                 return;
             }
