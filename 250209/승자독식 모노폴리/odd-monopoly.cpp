@@ -69,7 +69,8 @@ void init(){
 /* 플레이어 이동하기 */
 void move_player(int turn){
 
-    for(int p=1; p<=m; p++){ //각 플레이어를 이동시키기
+    int whereToGo[21] = {};
+    for(int p=1; p<=m; p++){ //각 플레이어를 어디로 이동시킬지 저장만 해두기!!(아직 이동 x)
         //player[p] 이동시키기
 
         if(player[p].r==-1) continue; //사라진 플레이어는 넘어가기
@@ -117,10 +118,17 @@ void move_player(int turn){
                 moveTo = priority[p][player[p].direction][2]; //없으면 세번째 (owner.size가 2 이상이므로 네번째는 할 필요 X)
         }
 
-        // 그럼 이제 player[p]를 moveTo 방향으로 한 칸 이동시키면 됨!
-        player[p].direction = moveTo;
-        player[p].r += dx[moveTo];
-        player[p].c += dy[moveTo];
+        whereToGo[p] = moveTo;
+    }
+
+    // 한방에 이동시키자
+    for(int p=1; p<=m; p++) {
+        // 그럼 이제 player[p]를 moveTo(= whereToGo[p]) 방향으로 한 칸 이동시키면 됨!
+        if(player[p].r == -1) continue;
+
+        player[p].direction = whereToGo[p];
+        player[p].r += dx[whereToGo[p]];
+        player[p].c += dy[whereToGo[p]];
 
         grid[player[p].r][player[p].c].owner = p;
         grid[player[p].r][player[p].c].time = turn;
@@ -137,13 +145,17 @@ void remove_player(){
         }
     }
     for(int p=1; p<=m; p++) {
+        if(player[p].r == -1) continue; //이미 제겨된 경우 넘어감
+
         if(exist[player[p].r][player[p].c]) {
             //player[p] 제거하기
             player[p].r = -1;
             player[p].c = -1;
             alive_player--;
         }
-        else exist[player[p].r][player[p].c] = true;
+        else {
+            exist[player[p].r][player[p].c] = true;
+        }
     }
 }
 
@@ -166,7 +178,7 @@ int main() {
     init();
 
     int turn = 1;
-    while(turn<1000){
+    while(turn<1000){ //1000
         // print(turn); //테스트용
 
         turn++;
@@ -181,7 +193,16 @@ int main() {
     }
 
     if(canNotMove || turn == 1000) cout<< -1; //답이 1000 이상인 경우 -1을 출력
-    else cout<< turn - 2; //1번 플레이어만 남게 되기까지 걸린 턴의 수 출력
-
+    else cout<< turn - 1; //1번 플레이어만 남게 되기까지 걸린 턴의 수 출력
+// cout<<" "<<alive_player;
+    // cout<<"p "<<priority[1][player[1].direction][0];
+    // cout<<'\n';
+    // for(int p=1; p<=m; p++){ //플레이어 번호
+    //     for(int i=1; i<=4; i++){ //위, 아래, 왼, 오
+    //         for(int j=0; j<4; j++){ //우선순위 0~3순위
+    //             cout<<priority[p][i][j]<<" ";
+    //         }cout<<'\n';
+    //     }
+    // }
     return 0;
 }
