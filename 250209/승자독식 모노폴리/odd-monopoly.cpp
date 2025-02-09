@@ -136,7 +136,7 @@ void remove_player(){
             //player[p] 제거하기
             player[p].r = -1;
             player[p].c = -1;
-            alive_player--; cout<<"alive: "<<alive_player<<"\n";
+            alive_player--;
         }
         else exist[player[p].r][player[p].c] = true;
     }
