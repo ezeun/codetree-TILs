@@ -99,7 +99,7 @@ void move_player(int turn){
 
         if(noOwner.size() == 0){ //아무도 독점계약 하지 않은 칸이 없다면,
             if(myOwn != -1) moveTo = myOwn; //본인이 독점계약한 칸으로 이동
-            // else{ // 그것마저 없다면 이동할 수 없으므로 -1 출력
+            // else{ // 그것마저 없다면 이동할 수 없으므로 -1 출력 (삭제)
             //     canNotMove = true;
             //     return;
             // }
@@ -124,7 +124,7 @@ void move_player(int turn){
     for(int p=1; p<=m; p++) {
         // 그럼 이제 player[p]를 moveTo(= whereToGo[p]) 방향으로 한 칸 이동시키면 됨!
         if(player[p].r == -1) continue;
-        if(whereToGo[p] == -1) continue; //
+        if(whereToGo[p] == -1) continue; // (추가)
 
         player[p].direction = whereToGo[p];
         player[p].r += dx[whereToGo[p]];
@@ -195,6 +195,5 @@ int main() {
     if(canNotMove || turn == 1000) cout<< -1; //답이 1000 이상인 경우 -1을 출력
     else cout<< turn - 1; //1번 플레이어만 남게 되기까지 걸린 턴의 수 출력
 
-// cout<<" "<<alive_player;
     return 0;
 }
