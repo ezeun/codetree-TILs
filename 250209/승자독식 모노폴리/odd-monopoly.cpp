@@ -99,10 +99,10 @@ void move_player(int turn){
 
         if(noOwner.size() == 0){ //아무도 독점계약 하지 않은 칸이 없다면,
             if(myOwn != -1) moveTo = myOwn; //본인이 독점계약한 칸으로 이동
-            else{ // 그것마저 없다면 이동할 수 없으므로 -1 출력
-                canNotMove = true;
-                return;
-            }
+            // else{ // 그것마저 없다면 이동할 수 없으므로 -1 출력
+            //     canNotMove = true;
+            //     return;
+            // }
         }
         else if(noOwner.size() == 1){ //아무도 독점계약 하지 않은 칸이 한개면, 해당 칸으로 이동
             moveTo = noOwner[0];
@@ -193,15 +193,7 @@ int main() {
 
     if(canNotMove || turn == 1000) cout<< -1; //답이 1000 이상인 경우 -1을 출력
     else cout<< turn - 1; //1번 플레이어만 남게 되기까지 걸린 턴의 수 출력
+
 // cout<<" "<<alive_player;
-    // cout<<"p "<<priority[1][player[1].direction][0];
-    // cout<<'\n';
-    // for(int p=1; p<=m; p++){ //플레이어 번호
-    //     for(int i=1; i<=4; i++){ //위, 아래, 왼, 오
-    //         for(int j=0; j<4; j++){ //우선순위 0~3순위
-    //             cout<<priority[p][i][j]<<" ";
-    //         }cout<<'\n';
-    //     }
-    // }
     return 0;
 }
