@@ -124,6 +124,7 @@ void move_player(int turn){
     for(int p=1; p<=m; p++) {
         // 그럼 이제 player[p]를 moveTo(= whereToGo[p]) 방향으로 한 칸 이동시키면 됨!
         if(player[p].r == -1) continue;
+        if(whereToGo[p] == -1) continue; //
 
         player[p].direction = whereToGo[p];
         player[p].r += dx[whereToGo[p]];
