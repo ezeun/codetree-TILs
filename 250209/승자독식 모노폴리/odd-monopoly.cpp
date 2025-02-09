@@ -131,6 +131,11 @@ void move_player(int turn){
 /* 겹치는 플레이어 제거하기 */
 void remove_player(){
     //번호 작은 -> 큰 순서대로 exist 배열에 표시, 이미 표시되어있으면 해당 플레이어 제거
+    for(int i=0; i<21; i++) {
+        for(int j=0; j<21; j++) {
+            exist[i][j] = false;
+        }
+    }
     for(int p=1; p<=m; p++) {
         if(exist[player[p].r][player[p].c]) {
             //player[p] 제거하기
