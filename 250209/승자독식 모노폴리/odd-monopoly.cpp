@@ -87,10 +87,10 @@ void move_player(int turn){
             int nextC = curC + dy[d];
 
             if(nextR < 0 || nextR >= n || nextC < 0 || nextC >= n) continue;
-            if(grid[nextR][nextC].time == 0 || turn - grid[nextR][nextC].time >= k){ //독점계약 없는 칸
+            if(grid[nextR][nextC].time == 0 || turn - grid[nextR][nextC].time > k){ //독점계약 없는 칸
                 noOwner.push_back(d);
             }
-            if(turn - grid[nextR][nextC].time < k && grid[nextR][nextC].owner == p){ //본인이 독점계약한 칸
+            if(turn - grid[nextR][nextC].time <= k && grid[nextR][nextC].owner == p){ //본인이 독점계약한 칸
                 myOwn = d;
             }
         }
