@@ -28,6 +28,7 @@ int dx[4] = {0, 0, 1, -1}; //동 서 남 북
 int dy[4] = {1, -1, 0, 0};
 
 int turn;
+bool finish;
 
 void input() {
     cin >> N >> M >> F;
@@ -68,9 +69,61 @@ void input() {
     }
 }
 
-void findMid() {
-    wallMid = {5, 8}; //test
-    floorMid = {4,5}; //test
+void findMid() { // 수정
+
+    //floorMat에서 시간의 벽 있는 부분(3으로 이루어진 정사각형) 찾기
+    pii leftTop = {-1, -1}; //3이 처음으로 나오는 곳 좌상단 좌표
+    for(int i=0; i<N; i++) {
+        for(int j=0; j<N; j++) {
+            if(floorMat[i][j]==3) {
+                leftTop = {i, j};
+                break;
+            }
+        }
+        if(leftTop.first!=-1) break;
+    }
+
+    //floorMid 찾기 (시간의 벽 둘러싼 부분 중 floorMat 값이 0인 곳의 좌표)
+    for(int j=leftTop.second; j<leftTop.second+M; j++) {
+        if(0<=leftTop.first-1 && floorMat[leftTop.first-1][j] != 1) {
+            floorMid = {leftTop.first-1, j};
+            break;
+        }
+        if(leftTop.first+M<N && floorMat[leftTop.first+M][j] != 1) {
+            floorMid = {leftTop.first+M, j};
+            break;
+        }
+    }
+    for(int i=leftTop.first; i<leftTop.first+M; i++) {
+        if(0<=leftTop.second-1 && floorMat[i][leftTop.second-1] != 1) {
+            floorMid = {i, leftTop.second-1};
+            break;
+        }
+        if(leftTop.second+M<N && floorMat[i][leftTop.second+M] != 1) {
+            floorMid = {i, leftTop.second+M};
+            break;
+        }
+    }
+
+    // wallMid 찾기 (시간의 벽에서 floorMid랑 인접한 곳의 wallMat 관점 좌표)
+    for(int d=0; d<4; d++) {
+        if(floorMat[floorMid.first+dx[d]][floorMid.second+dy[d]] == 3) {
+            // floorMid에서 d방향쪽에 벽이 있음 (d가 서쪽방향이면 동쪽 벽에 wallMid가 있는거임)
+            // int wall = (d < 2) ? 1 - d : 5 - d; //d와 wall은 반대방향 관계임(0<->1, 2<->3)
+            if(d==0) {
+                wallMid = { floorMid.first-leftTop.first+M,0};
+            }
+            else if(d==1) {
+                wallMid = {floorMid.first-leftTop.first+M,M*3-1};
+            }
+            else if(d==2) {
+                wallMid = {0, floorMid.second-leftTop.second+M};
+            }
+            else if(d==3) {
+                wallMid = {M*3-1, floorMid.second-leftTop.second+M};
+            }
+        }
+    }
 }
 
 pii findNext(pii cur, int d) {
@@ -158,8 +211,9 @@ void floorMidBfs() {
             turn++;
             strangeMove(turn);
         }
-        if(floorMat[cur.first][cur.second]==5) continue;
+        if(floorMat[cur.first][cur.second]==5) continue; // 추가 1
         if(floorMat[cur.first][cur.second]==4) {
+            finish = true; // 추가 2
             break;
         }
         for(int d=0; d<4; d++) {
@@ -196,11 +250,10 @@ int main() {
 
     wallMidTimeStrangeMove(); // wallMidTime동안 이상현상 번지기
 
-    // floorMat에서 턴 이어서 진행 (floorMid에서 ed까지 가는 최단시간 구하기)
-    floorMidBfs();
+    floorMidBfs(); // floorMat에서 턴 이어서 진행 (floorMid에서 ed까지 가는 최단시간 구하기)
 
-    cout<<turn;
-    // printWallMat();
+    if(finish) cout<<turn;
+    else cout << -1;
 
     return 0;
 }
