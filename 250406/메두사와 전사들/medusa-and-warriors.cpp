@@ -162,7 +162,7 @@ void notSeeBfs(int direction, int x, int y) {
             int nx = cur.x+dx[d];
             int ny = cur.y+dy[d];
             if(nx<0||nx>=N||ny<0||ny>=N) continue;
-            if(seeMat[direction][nx][ny]!=0) continue;
+            if(seeMat[direction][nx][ny]==3) continue;
             // if(vis[nx][ny]) continue;
             if(direction<=1) { //상,하
                 if(abs(nx-x) < abs(ny-y)) continue;
@@ -361,7 +361,7 @@ int main() {
 
         medusaSee(); //2. 메두사의 시선
 
-        // printSeeMat(mxDir);
+        // if(turn==2)printSeeMat(mxDir);
 
         warriorToRock();
 
