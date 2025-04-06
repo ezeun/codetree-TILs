@@ -195,9 +195,11 @@ void seeBfs(int direction) {
         dy[0]=0, dy[1]=1, dy[2]=0;
     }
 
+    int vis[51][51]={0,}; //방문체크
     queue<NODE> q;
     q.push({medusa.x, medusa.y});
     seeMat[direction][medusa.x][medusa.y] = 2;
+    vis[medusa.x][medusa.y]=1;
 
     while(!q.empty()) {
         NODE cur = q.front(); q.pop();
@@ -212,14 +214,17 @@ void seeBfs(int direction) {
             int nx = cur.x+dx[d];
             int ny = cur.y+dy[d];
             if(nx<0||nx>=N||ny<0||ny>=N) continue;
-            if(seeMat[direction][nx][ny]||seeMat[direction][nx][ny]==-1) continue;
+            if(seeMat[direction][nx][ny]>0) continue;
+            if(vis[nx][ny]) continue;
             if(direction<=1) { //상,하
                 if(abs(nx-medusa.x) < abs(ny-medusa.y)) continue;
             }
             else { //좌,우
                 if(abs(nx-medusa.x) > abs(ny-medusa.y)) continue;
             }
-            seeMat[direction][nx][ny] = 1;
+            if(seeMat[direction][nx][ny]!=-1)
+                seeMat[direction][nx][ny] = 1;
+            vis[nx][ny]=1;
             q.push({nx, ny});
         }
     }
@@ -356,8 +361,7 @@ int main() {
 
         medusaSee(); //2. 메두사의 시선
 
-        // if(turn==2)
-        //     printSeeMat(0);
+        // printSeeMat(mxDir);
 
         warriorToRock();
 
