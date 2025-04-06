@@ -149,9 +149,11 @@ void notSeeBfs(int direction, int x, int y) {
         size=2;
     }
 
+    int vis[51][51]={0,}; //방문체크
     queue<NODE> q;
     q.push({x,y});
-    seeMat[direction][x][y] = -1;
+    seeMat[direction][x][y] = 3;
+    vis[x][y]=1;
 
     while(!q.empty()) {
         NODE cur = q.front(); q.pop();
@@ -160,7 +162,8 @@ void notSeeBfs(int direction, int x, int y) {
             int nx = cur.x+dx[d];
             int ny = cur.y+dy[d];
             if(nx<0||nx>=N||ny<0||ny>=N) continue;
-            if(seeMat[direction][nx][ny]==-1) continue;
+            if(seeMat[direction][nx][ny]==3) continue;
+            if(vis[nx][ny]) continue;;
             if(direction<=1) { //상,하
                 if(abs(nx-x) < abs(ny-y)) continue;
             }
@@ -168,6 +171,7 @@ void notSeeBfs(int direction, int x, int y) {
                 if(abs(nx-x) > abs(ny-y)) continue;
             }
             seeMat[direction][nx][ny] = -1;
+            vis[nx][ny]=1;
             q.push({nx, ny});
         }
     }
@@ -197,7 +201,7 @@ void seeBfs(int direction) {
 
     while(!q.empty()) {
         NODE cur = q.front(); q.pop();
-        if(!warriorMat[cur.x][cur.y].empty()) {
+        if(!warriorMat[cur.x][cur.y].empty() && seeMat[direction][cur.x][cur.y]!=-1) {
             notSeeBfs(direction, cur.x, cur.y); //seeMat를 -1로 채우기
             for(int w : warriorMat[cur.x][cur.y]) {
                 rockWarrior[direction].push_back(w);
@@ -266,7 +270,7 @@ void moveWarrior1() {
             int nx=warriors[i].r+dx[d];
             int ny=warriors[i].c+dy[d];
             if(nx<0||nx>=N||ny<0||ny>=N) continue;
-            if(seeMat[mxDir][nx][ny]==1) continue;
+            if(seeMat[mxDir][nx][ny]==1||seeMat[mxDir][nx][ny]==3) continue;
             if(abs(medusa.x-nx)+abs(medusa.y-ny)<distance) { //메두사와의 거리를 줄일 수 있는 방향으로 한 칸 이동
                 warriorMat[warriors[i].r][warriors[i].c].erase(remove(warriorMat[warriors[i].r][warriors[i].c].begin(), warriorMat[warriors[i].r][warriors[i].c].end(), i), warriorMat[warriors[i].r][warriors[i].c].end());
                 warriors[i].r = nx, warriors[i].c = ny;
@@ -288,7 +292,7 @@ void moveWarrior2() {
             int nx=warriors[i].r+dx[d];
             int ny=warriors[i].c+dy[d];
             if(nx<0||nx>=N||ny<0||ny>=N) continue;
-            if(seeMat[mxDir][nx][ny]==1) continue;
+            if(seeMat[mxDir][nx][ny]==1||seeMat[mxDir][nx][ny]==3) continue;
             if(abs(medusa.x-nx)+abs(medusa.y-ny)<distance) { //메두사와의 거리를 줄일 수 있는 방향으로 한 칸 이동
                 warriorMat[warriors[i].r][warriors[i].c].erase(remove(warriorMat[warriors[i].r][warriors[i].c].begin(), warriorMat[warriors[i].r][warriors[i].c].end(), i), warriorMat[warriors[i].r][warriors[i].c].end());
                 warriors[i].r = nx, warriors[i].c = ny;
@@ -317,6 +321,13 @@ void debug(int turn) {
         cout<<warriors[i].isAlive<<" "<<warriors[i].isRock<<'\n';
     }
 }
+void printSeeMat(int direction) {
+    for(int i=0; i<N; i++) {
+        for(int j=0; j<N; j++) {
+            cout<<seeMat[direction][i][j]<<" ";
+        }cout<<'\n';
+    }
+}
 int main() {
 
     init();
@@ -334,7 +345,8 @@ int main() {
         rockWarriorNum = 0;
         killWarriorNum = 0;
 
-        // debug(++turn);
+        ++turn;
+        // debug(turn);
 
         moveMedusa(); //1. 메두사의 이동
         if(medusa.x==ed.x && medusa.y==ed.y) { //메두사가 공원에 도착하는 턴
@@ -343,6 +355,9 @@ int main() {
         }
 
         medusaSee(); //2. 메두사의 시선
+
+        // if(turn==2)
+        //     printSeeMat(0);
 
         warriorToRock();
 
