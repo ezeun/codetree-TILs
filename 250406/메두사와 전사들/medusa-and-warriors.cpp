@@ -149,11 +149,11 @@ void notSeeBfs(int direction, int x, int y) {
         size=2;
     }
 
-    int vis[51][51]={0,}; //방문체크
+    // int vis[51][51]={0,}; //방문체크
     queue<NODE> q;
     q.push({x,y});
     seeMat[direction][x][y] = 3;
-    vis[x][y]=1;
+    // vis[x][y]=1;
 
     while(!q.empty()) {
         NODE cur = q.front(); q.pop();
@@ -162,7 +162,7 @@ void notSeeBfs(int direction, int x, int y) {
             int nx = cur.x+dx[d];
             int ny = cur.y+dy[d];
             if(nx<0||nx>=N||ny<0||ny>=N) continue;
-            if(seeMat[direction][nx][ny]==3) continue;
+            if(seeMat[direction][nx][ny]!=0) continue;
             if(vis[nx][ny]) continue;;
             if(direction<=1) { //상,하
                 if(abs(nx-x) < abs(ny-y)) continue;
@@ -171,7 +171,7 @@ void notSeeBfs(int direction, int x, int y) {
                 if(abs(nx-x) > abs(ny-y)) continue;
             }
             seeMat[direction][nx][ny] = -1;
-            vis[nx][ny]=1;
+            // vis[nx][ny]=1;
             q.push({nx, ny});
         }
     }
