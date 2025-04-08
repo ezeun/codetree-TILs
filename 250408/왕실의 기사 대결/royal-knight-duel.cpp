@@ -83,7 +83,7 @@ void restore(){
 }
 
 bool move(int i, int d){
-
+    bool res = true;
     // i번 기사를 d방향으로 밀기
     for(int x=knight[i].r; x<knight[i].r+knight[i].h; x++){
         for(int y=knight[i].c; y<knight[i].c+knight[i].w; y++){
@@ -99,12 +99,13 @@ bool move(int i, int d){
             }
             if(mat2[x][y]){
                 pushed_knight.push_back(mat2[x][y]);
-                return move(mat2[x][y], d); //이동하려는 칸에 다른 기사 있으면 연쇄적으로 한칸 밀려남
+                bool ret = move(mat2[x][y], d); //이동하려는 칸에 다른 기사 있으면 연쇄적으로 한칸 밀려남
+                if(!ret) res=false;
             }
             mat2[x][y]=i;
         }
     }
-    return true;
+    return res;
 }
 
 int calc_damage(){
