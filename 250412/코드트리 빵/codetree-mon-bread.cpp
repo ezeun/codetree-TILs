@@ -138,11 +138,11 @@ int main() {
         for (int i = 1; i <= m; i++) {
             moveToStore(i); //배정된 사람은 편의점으로 이동
         }
-        checkCanNotGo();
         
         if (t <= m) {
             moveToBasecamp(t);
         }
+        checkCanNotGo();
 
         if (numOfArrive == m) {
             cout << t;
