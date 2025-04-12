@@ -109,6 +109,7 @@ void moveToStore(int num) { //num번 사람을 편의점 방향으로 1칸 움�
         int ny = person[num].c + dy[d];
         if (!inRange(nx, ny)) continue;
         if (mat[nx][ny] == -1) continue;
+        if (dist[nx][ny] == 0) continue;
         if (dist[nx][ny] < minDist) {
             minDist = dist[nx][ny];
             minDir = d;
@@ -138,11 +139,11 @@ int main() {
         for (int i = 1; i <= m; i++) {
             moveToStore(i); //배정된 사람은 편의점으로 이동
         }
+        checkCanNotGo();
         
         if (t <= m) {
             moveToBasecamp(t);
         }
-        checkCanNotGo();
 
         if (numOfArrive == m) {
             cout << t;
